@@ -42,7 +42,7 @@ Matrix zeros(int rows, int cols) {
     return Matrix(data);
 }
 
-Matrix one_hot(int label, int num_labels) {
+Matrix one_hot(int label, size_t num_labels) {
     vector<double> data(num_labels, 0);
     data[label] = 1;
     return Matrix(data);
