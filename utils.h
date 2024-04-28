@@ -8,12 +8,12 @@
 #define NEURALNETWORK_UTILS_H
 
 
-Matrix exp(const Matrix &m);
 Matrix random_init(int rows, int cols);
 Matrix zeros(int rows, int cols);
 Matrix one_hot(int label, int num_labels);
+Matrix diag(vector<double> v);
 
-
+Matrix exp(const Matrix &m);
 Matrix sigmoid(const Matrix &m);
 Matrix softmax(const Matrix &m);
 Matrix relu(const Matrix &m);

@@ -6,6 +6,9 @@
 #include <random>
 #include "utils.h"
 
+
+#pragma region creation
+
 Matrix random_init(int rows, int cols) {
     vector<vector<double>> data;
     data.reserve(rows);
@@ -32,6 +35,13 @@ Matrix zeros(int rows, int cols) {
     return Matrix(data);
 }
 
+Matrix one_hot(int label, int num_labels) {
+    vector<double> data(num_labels, 0);
+    data[label] = 1;
+    return Matrix(data);
+}
+
+#pragma endregion creation
 
 #pragma region operations
 
@@ -98,6 +108,7 @@ Matrix relu(const Matrix &m) {
 Matrix d_sigmoid(const Matrix &m) {
 
 }
+
 
 
 #pragma endregion operations
