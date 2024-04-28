@@ -1,6 +1,6 @@
 #include <iostream>
 #include "neuralnetwork.h"
-
+#define EPOCHS 1000
 
 using namespace std;
 
@@ -9,20 +9,30 @@ using namespace std;
 int main() {
 
     try {
-        Matrix m1 = zeros(3, 3);
-        Matrix m2 = zeros(3, 1);
-        cout << m1 * m2 << endl;
 
-        cout << "***********************" << endl;
-
-        NeuralNetwork nn({3, 3, 2}, 0.01);
+        NeuralNetwork nn({3, 4, 3, 2}, 0.001);
         auto p = read_data_csv("../data.csv", "label");
-        cout << p.first.shape.first << " " << p.first.shape.second << endl;
-        cout << p.first.row(1).shape.first << " " << p.first.row(1).shape.second << endl;
-        cout << p.first;
-
         cout << "***********************" << endl;
-        nn.forward(p.first.row(1));
+        vector<pair<Matrix, int>> dataloader;
+        dataloader.reserve(p.first.shape.first);
+        for (int i = 0; i < p.first.shape.first; i++) {
+            dataloader.emplace_back(p.first.row(i), (int)p.second.row(i)[0][0]);
+        }
+
+        vector<double> loss_per_epoch(EPOCHS, 0);
+
+        for (int epoch = 0; epoch < EPOCHS; epoch++) {
+            for (auto data = dataloader.begin(); data != dataloader.end(); data++) {
+                auto out = nn.forward(&data->first);
+                loss_per_epoch[epoch] += cross_entropy_loss(data->second, out) / dataloader.size();
+                cout << "Loss: " << cross_entropy_loss(data->second, out) << endl;
+                nn.backpropagate(data->first, data->second, out);
+            }
+            cout << "Epoch: " << epoch << " Loss: " << loss_per_epoch[epoch] << endl;
+        }
+
+
+
     }
     catch (MatrixException &e) {
         cout << e.what() << endl;

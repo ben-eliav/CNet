@@ -12,12 +12,12 @@ class NeuralNetwork {
     vector<Matrix> weights;
     vector<Matrix> biases;
     vector<Matrix> hidden;
-    vector<Matrix> gradients;
+    vector<Matrix> outputs;
     double lr;
 public:
     NeuralNetwork(vector<int> layer_sizes, double lr);
-    Matrix forward(Matrix x);
-    void backpropagate(Matrix input, const Matrix &target, const Matrix &output);
+    Matrix forward(Matrix *x);
+    void backpropagate(const Matrix &input, int label, const Matrix &output);
 };
 
 #endif //NEURALNETWORK_NEURALNETWORK_H

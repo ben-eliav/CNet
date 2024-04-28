@@ -15,26 +15,39 @@ NeuralNetwork::NeuralNetwork(vector<int> layer_sizes, double lr) : lr(lr) {
 }
 
 // Assuming the input is a single example
-Matrix NeuralNetwork::forward(Matrix x) {
-    if (x.shape.second != 1) {
+Matrix NeuralNetwork::forward(Matrix *x) {
+    if (x->shape.second != 1) {
         throw MatrixException("Input must be a single example");
     }
     for (int i = 0; i < weights.size()-1; i++) {
-        x = weights[i] * x + biases[i];
-        x = sigmoid(x);
-        hidden.push_back(x);
-        gradients.push_back(d_sigmoid(x));
+        outputs.push_back(weights[i] * (*x) + biases[i]);
+        hidden.push_back(sigmoid(outputs.back()));
+        x = &hidden.back();
+
     }
-    x = weights.back() * x + biases.back();
-    x = softmax(x);
-    return x;
+    Matrix final_out = weights.back() * (*x) + biases.back();
+    final_out = softmax(final_out);
+    return final_out;
 }
 
-// Assuming that the neural network is a classification network using softmax + cross entropy at the end. Also, the input is a single example.
-// For now: assuming there are 2 layers
-void NeuralNetwork::backpropagate(Matrix input, const Matrix &target, const Matrix &output) {
-    Matrix d_before = output - target;
-    vector<Matrix> final_gradients;
-    for (int i = weights.size() - 1; i >= 0; i--) {
+void NeuralNetwork::backpropagate(const Matrix &input, int label, const Matrix &output) {
+    Matrix y_true = one_hot(label, output.shape.first);
+    Matrix error = output - y_true;
+
+    for (int i = weights.size()-1; i >= 0; i--) {
+        if (i > 0) {
+            Matrix d_weights = error * hidden[i-1].transpose();
+            Matrix d_biases = error;
+            error = weights[i].transpose() * d_biases;
+            error = d_sigmoid(outputs[i-1]) * error;
+            weights[i] = weights[i] - d_weights * lr;
+            biases[i] = biases[i] - d_biases * lr;
+        }
+        else {
+            Matrix d_weights = error * input.transpose();
+            Matrix d_biases = error;
+            weights[i] = weights[i] - d_weights * lr;
+            biases[i] = biases[i] - d_biases * lr;
+        }
     }
 }
