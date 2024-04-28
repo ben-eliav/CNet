@@ -25,8 +25,7 @@ Matrix d_sigmoid(const Matrix &m);
 Matrix d_relu(const Matrix &m);  // TODO: add implementation
 Matrix d_cross_entropy_loss(const Matrix &y_true, const Matrix &y_pred);
 
-Matrix read_data_csv(const string &filename);
-
+pair<Matrix, Matrix> read_data_csv(const string &filename, const string &label_column);
 
 
 

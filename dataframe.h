@@ -48,6 +48,7 @@ public:
     Matrix operator*(const Matrix &other) const;
     Matrix operator*(double scalar) const;
     Matrix operator/(double scalar) const;
+    bool operator==(const Matrix &other) const;
     Matrix transpose() const;
     Matrix operator-() const;
     Matrix col(int i) const;

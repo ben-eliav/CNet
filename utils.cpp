@@ -5,6 +5,10 @@
 #include <cmath>
 #include <random>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <map>
 #include "utils.h"
 
 using namespace std;
@@ -132,7 +136,6 @@ Matrix relu(const Matrix &m) {
 
 Matrix d_sigmoid(const Matrix &m) {
     Matrix sig = sigmoid(m);
-    cout << "sig" << endl << sig << endl;
     return diag(sig - sig.times(sig));
 }
 
@@ -157,3 +160,44 @@ double cross_entropy_loss(int y_true, const Matrix &y_pred) {
 
 #pragma endregion operations
 
+
+pair<Matrix, Matrix> read_data_csv(const string &filename, const string &label_column) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        throw MatrixException("Could not open file");
+    }
+
+    map<string, vector<double>> data;
+    string line;
+    getline(file, line);
+
+    vector<string> headers;
+    stringstream ss(line);
+    string cell;
+
+    while (getline(ss, cell, ',')) {
+        cell.erase(remove_if(cell.begin(), cell.end(), [](char c) { return !isalnum(c); }), cell.end());
+        headers.push_back(cell);
+    }
+    while (getline(file, line)) {
+        int i = 0;
+        ss = stringstream(line);
+        while (getline(ss, cell, ',')) {
+            data[headers[i++]].push_back(stod(cell));
+        }
+    }
+
+    vector<vector<double>> X_data;
+    vector<double> y_data;
+
+    for (const string &header : headers) {
+        if (header == label_column) {
+            y_data = data[header];
+        } else {
+            X_data.push_back(data[header]);
+        }
+    }
+
+
+    return pair<Matrix, Matrix>{Matrix(X_data).transpose(), Matrix(y_data)};
+}

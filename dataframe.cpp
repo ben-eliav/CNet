@@ -144,6 +144,20 @@ Matrix Matrix::operator/(double scalar) const{
     return *this * (1 / scalar);
 }
 
+bool Matrix::operator==(const Matrix &other) const{
+    if (shape != other.shape) {
+        return false;
+    }
+    for (int i = 0; i < shape.first; i++) {
+        for (int j = 0; j < shape.second; j++) {
+            if (data[i][j] != other[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 Matrix Matrix::transpose() const{
     vector<vector<double>> result;
     result.reserve(shape.second);
