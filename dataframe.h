@@ -35,13 +35,13 @@ inline vector<vector<double>> vec2mat(const vector<double>& vec);
 #pragma region Matrix
 
 class Matrix {
-    const vector<vector<double>> data;
+    vector<vector<double>> data;
 
 public:
     pair<size_t, size_t> shape;
 
     explicit Matrix(vector<vector<double>> data);
-    explicit Matrix(const vector<double> &data);
+    explicit Matrix(const vector<double> &data, bool row = false);
     vector<double> operator[](int i) const;
     Matrix operator+(const Matrix &other) const;
     Matrix operator-(const Matrix &other) const;
@@ -51,6 +51,7 @@ public:
     bool operator==(const Matrix &other) const;
     Matrix transpose() const;
     Matrix operator-() const;
+    Matrix row(int i) const;
     Matrix col(int i) const;
     Matrix times(const Matrix &other) const;
     friend ostream &operator<<(ostream &os, const Matrix &matrix);

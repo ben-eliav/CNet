@@ -24,9 +24,13 @@ char *MatrixException::what() {
     return const_cast<char *>(message);
 }
 
-inline vector<vector<double>> vec2mat(const vector<double> &vec) {
+inline vector<vector<double>> vec2mat(const vector<double> &vec, bool row = false) {
     // convert a vector to a column vector matrix
     vector<vector<double>> result;
+    if (row) {
+        result.push_back(vec);
+        return result;
+    }
     result.reserve(vec.size());
     for (double i : vec) {
         result.push_back({i});
@@ -49,7 +53,7 @@ Matrix::Matrix(vector<vector<double>> data) : data{move(data)} {
     }
 }
 
-Matrix::Matrix(const vector<double> &data) : Matrix(vec2mat(data)) {}
+Matrix::Matrix(const vector<double> &data, bool row) : Matrix(vec2mat(data, row)) {}
 
 #pragma region operators
 
@@ -170,6 +174,10 @@ Matrix Matrix::transpose() const{
         result.push_back(row);
     }
     return Matrix(result);
+}
+
+Matrix Matrix::row(int i) const{
+    return Matrix({data[i]});
 }
 
 Matrix Matrix::col(int i) const {

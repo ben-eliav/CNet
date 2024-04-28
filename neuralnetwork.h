@@ -9,16 +9,15 @@
 #include "dataframe.h"
 
 class NeuralNetwork {
-    vector<Matrix> layers;
+    vector<Matrix> weights;
     vector<Matrix> biases;
+    vector<Matrix> hidden;
+    vector<Matrix> gradients;
     double lr;
 public:
     NeuralNetwork(vector<int> layer_sizes, double lr);
-    Matrix forward(Matrix input);
-    void train(Matrix input, Matrix target, double learning_rate);
-    void backpropagate(Matrix input, Matrix target, double learning_rate);
-    void save(string filename);
-    void load(string filename);
+    Matrix forward(Matrix x);
+    void backpropagate(Matrix input, const Matrix &target, const Matrix &output);
 };
 
 #endif //NEURALNETWORK_NEURALNETWORK_H

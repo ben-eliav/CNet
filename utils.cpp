@@ -29,6 +29,7 @@ Matrix random_init(int rows, int cols) {
         }
         data.push_back(row);
     }
+    cout << Matrix(data) << endl;
     return Matrix(data);
 }
 
@@ -90,7 +91,7 @@ Matrix exp(const Matrix &m) {
 
 Matrix sigmoid(const Matrix &m) {
     if (m.shape.second != 1) {
-        throw MatrixException("Sigmoid function only works on column vectors");
+        throw MatrixException("Sigmoid function only works on row vectors");
     }
     vector<vector<double>> data;
     data.reserve(m.shape.first);
@@ -102,7 +103,7 @@ Matrix sigmoid(const Matrix &m) {
 
 Matrix softmax(const Matrix &m) {
     if (m.shape.second != 1) {
-        throw MatrixException("Softmax function only works on column vectors");
+        throw MatrixException("Softmax function only works on row vectors");
     }
 
     vector<vector<double>> data;
@@ -199,5 +200,5 @@ pair<Matrix, Matrix> read_data_csv(const string &filename, const string &label_c
     }
 
 
-    return pair<Matrix, Matrix>{Matrix(X_data).transpose(), Matrix(y_data)};
+    return pair<Matrix, Matrix>{Matrix(X_data), Matrix(y_data)};
 }

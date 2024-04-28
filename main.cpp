@@ -1,5 +1,6 @@
 #include <iostream>
-#include "utils.h"
+#include "neuralnetwork.h"
+
 
 using namespace std;
 
@@ -8,17 +9,20 @@ using namespace std;
 int main() {
 
     try {
-        Matrix m1 = random_init(3, 3);
-        Matrix m2 = zeros(3, 3);
+        Matrix m1 = zeros(3, 3);
+        Matrix m2 = zeros(3, 1);
+        cout << m1 * m2 << endl;
 
-        //time the function
-        auto start = chrono::high_resolution_clock::now();
-        Matrix m3 = read_data_csv("../data.csv", "label").first;  // data is in the parent directory of cmake-build-debug
-        auto end = chrono::high_resolution_clock::now();
-        chrono::duration<double> elapsed = end - start;
-        cout << "Elapsed time: " << elapsed.count() << " s\n";
-        cout << m3;
+        cout << "***********************" << endl;
 
+        NeuralNetwork nn({3, 3, 2}, 0.01);
+        auto p = read_data_csv("../data.csv", "label");
+        cout << p.first.shape.first << " " << p.first.shape.second << endl;
+        cout << p.first.row(1).shape.first << " " << p.first.row(1).shape.second << endl;
+        cout << p.first;
+
+        cout << "***********************" << endl;
+        nn.forward(p.first.row(1));
     }
     catch (MatrixException &e) {
         cout << e.what() << endl;
