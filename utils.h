@@ -10,7 +10,7 @@
 
 Matrix random_init(int rows, int cols);
 Matrix zeros(int rows, int cols);
-Matrix one_hot(int label, int num_labels);
+Matrix one_hot(int label, size_t num_labels);
 Matrix diag(const vector<double> &v);
 Matrix diag(const Matrix &m);
 
