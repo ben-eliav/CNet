@@ -41,6 +41,29 @@ Matrix one_hot(int label, int num_labels) {
     return Matrix(data);
 }
 
+Matrix diag(const vector<double> &v) {
+    vector<vector<double>> data;
+    data.reserve(v.size());
+    for (int i = 0; i < v.size(); i++) {
+        data.emplace_back(v.size(), 0);
+        data[i][i] = v[i];
+    }
+    return Matrix(data);
+}
+
+Matrix diag(const Matrix &m) {
+    if (m.shape.first != 1 && m.shape.second != 1) {
+        throw MatrixException("Diag function only works on vectors");
+    }
+    vector<vector<double>> data;
+    data.reserve(m.shape.first);
+    for (int i = 0; i < m.shape.first; i++) {
+        data.emplace_back(m.shape.first, 0);
+        data[i][i] = m[i][0];
+    }
+    return Matrix(data);
+}
+
 #pragma endregion creation
 
 #pragma region operations
@@ -106,9 +129,13 @@ Matrix relu(const Matrix &m) {
 }
 
 Matrix d_sigmoid(const Matrix &m) {
-
+    Matrix sig = sigmoid(m);
+    return diag(sig - sig.times(sig));
 }
 
+Matrix cross_entropy_loss(Matrix y_true, Matrix y_pred) {
+    return zeros(1, 1);
+}
 
 
 #pragma endregion operations

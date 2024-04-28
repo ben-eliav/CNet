@@ -12,13 +12,9 @@ int main() {
         Matrix m2 = zeros(3, 3);
 
         vector<double> v1 = {1, -2, 3};
-        cout << m1.shape.first << " " << m1.shape.second << endl;
-        cout << m1.transpose();
 
-        Matrix m3{v1};
-
-        cout << relu(m1);
-        cout << m2;
+        Matrix m3 = diag(one_hot(3, 5));
+        cout << m3;
 
     }
     catch (MatrixException &e) {

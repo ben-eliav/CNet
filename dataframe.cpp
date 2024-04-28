@@ -71,7 +71,7 @@ Matrix Matrix::operator-() const{
     return Matrix(result);
 }
 
-Matrix Matrix::operator+(Matrix &other) const{
+Matrix Matrix::operator+(const Matrix &other) const{
     if (shape != other.shape) {
         throw MatrixException("Cannot add matrices of different shapes");
     }
@@ -88,7 +88,7 @@ Matrix Matrix::operator+(Matrix &other) const{
     return Matrix(result);
 }
 
-Matrix Matrix::operator-(Matrix &other) const{
+Matrix Matrix::operator-(const Matrix &other) const{
     if (shape != other.shape) {
         throw MatrixException("Cannot subtract matrices of different shapes");
     }
@@ -105,7 +105,7 @@ Matrix Matrix::operator-(Matrix &other) const{
     return Matrix(result);
 }
 
-Matrix Matrix::operator*(Matrix &other) const{
+Matrix Matrix::operator*(const Matrix &other) const{
     if (shape.second != other.shape.first) {
         throw MatrixException("Cannot multiply matrices of incompatible shapes");
     }
@@ -163,6 +163,23 @@ Matrix Matrix::col(int i) const {
     result.reserve(shape.first);
     for (const vector<double> &j: data) {
         result.push_back({j[i]});
+    }
+    return Matrix(result);
+}
+
+Matrix Matrix::times(const Matrix &other) const {
+    if (shape != other.shape) {
+        throw MatrixException("Cannot element-wise multiply matrices of different shapes");
+    }
+    vector<vector<double>> result;
+    result.reserve(shape.first);
+    for (int i = 0; i < shape.first; i++) {
+        vector<double> row;
+        row.reserve(shape.second);
+        for (int j = 0; j < shape.second; j++) {
+            row.push_back(data[i][j] * other[i][j]);
+        }
+        result.push_back(row);
     }
     return Matrix(result);
 }

@@ -43,14 +43,15 @@ public:
     explicit Matrix(vector<vector<double>> data);
     explicit Matrix(const vector<double> &data);
     vector<double> operator[](int i) const;
-    Matrix operator+(Matrix &other) const;
-    Matrix operator-(Matrix &other) const;
-    Matrix operator*(Matrix &other) const;
-    Matrix operator*(double scalar) const;
-    Matrix operator/(double scalar) const;
+    Matrix operator+(const Matrix &other) const;
+    Matrix operator-(const Matrix &other) const;
+    Matrix operator*(const Matrix &other) const;
+    Matrix operator*(const double scalar) const;
+    Matrix operator/(const double scalar) const;
     Matrix transpose() const;
     Matrix operator-() const;
     Matrix col(int i) const;
+    Matrix times(const Matrix &other) const;
     friend ostream &operator<<(ostream &os, const Matrix &matrix);
 
     vector<vector<double>>::const_iterator begin() const {
