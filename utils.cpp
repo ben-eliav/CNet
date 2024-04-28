@@ -3,7 +3,37 @@
 //
 
 #include <cmath>
+#include <random>
 #include "utils.h"
+
+Matrix random_init(int rows, int cols) {
+    vector<vector<double>> data;
+    data.reserve(rows);
+    random_device rd;
+    mt19937 gen(rd());
+    normal_distribution<double> dist(0, 1);
+    for (int i = 0; i < rows; i++) {
+        vector<double> row;
+        row.reserve(cols);
+        for (int j = 0; j < cols; j++) {
+            row.push_back(dist(gen));
+        }
+        data.push_back(row);
+    }
+    return Matrix(data);
+}
+
+Matrix zeros(int rows, int cols) {
+    vector<vector<double>> data;
+    data.reserve(rows);
+    for (int i = 0; i < rows; i++) {
+        data.emplace_back(cols, 0);
+    }
+    return Matrix(data);
+}
+
+
+#pragma region operations
 
 Matrix exp(const Matrix &m) {
     vector<vector<double>> data;
@@ -68,3 +98,7 @@ Matrix relu(const Matrix &m) {
 Matrix d_sigmoid(const Matrix &m) {
 
 }
+
+
+#pragma endregion operations
+
