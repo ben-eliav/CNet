@@ -7,7 +7,7 @@
 
 using namespace std;
 
-NeuralNetwork::NeuralNetwork(vector<int> layer_sizes, double lr) : lr(lr) {
+NeuralNetwork::NeuralNetwork(vector<int> layer_sizes, double lr, size_t sample_size) : lr(lr), sample_size(sample_size) {
     for (int i = 0; i < layer_sizes.size() - 1; i++) {
         weights.push_back(random_init(layer_sizes[i+1], layer_sizes[i]));
         biases.push_back(random_init(layer_sizes[i + 1], 1));
@@ -46,8 +46,8 @@ void NeuralNetwork::backpropagate(const Matrix &input, int label, const Matrix &
         else {
             Matrix d_weights = error * input.transpose();
             Matrix d_biases = error;
-            weights[i] = weights[i] - d_weights * lr;
-            biases[i] = biases[i] - d_biases * lr;
+            weights[i] = weights[i] - d_weights * lr / sample_size;
+            biases[i] = biases[i] - d_biases * lr / sample_size;
         }
     }
 }

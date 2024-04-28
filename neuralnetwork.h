@@ -14,8 +14,9 @@ class NeuralNetwork {
     vector<Matrix> hidden;
     vector<Matrix> outputs;
     double lr;
+    size_t sample_size;
 public:
-    NeuralNetwork(vector<int> layer_sizes, double lr);
+    NeuralNetwork(vector<int> layer_sizes, double lr, size_t sample_size);
     Matrix forward(Matrix *x);
     void backpropagate(const Matrix &input, int label, const Matrix &output);
 };
