@@ -18,7 +18,8 @@ Matrix exp(const Matrix &m);
 Matrix sigmoid(const Matrix &m);
 Matrix softmax(const Matrix &m);
 Matrix relu(const Matrix &m);
-Matrix cross_entropy_loss(const Matrix &y_true, const Matrix &y_pred);
+double cross_entropy_loss(const Matrix &y_true, const Matrix &y_pred);
+double cross_entropy_loss(int y_true, const Matrix &y_pred);
 
 Matrix d_sigmoid(const Matrix &m);
 Matrix d_relu(const Matrix &m);  // TODO: add implementation

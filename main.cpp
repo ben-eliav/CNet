@@ -13,8 +13,9 @@ int main() {
 
         vector<double> v1 = {1, -2, 3};
 
-        Matrix m3 = diag(one_hot(3, 5));
-        cout << m3;
+        Matrix m3{v1};
+        cout << d_sigmoid(m3) << endl;
+
 
     }
     catch (MatrixException &e) {

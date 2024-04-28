@@ -4,8 +4,10 @@
 
 #include <cmath>
 #include <random>
+#include <iostream>
 #include "utils.h"
 
+using namespace std;
 
 #pragma region creation
 
@@ -130,11 +132,26 @@ Matrix relu(const Matrix &m) {
 
 Matrix d_sigmoid(const Matrix &m) {
     Matrix sig = sigmoid(m);
+    cout << "sig" << endl << sig << endl;
     return diag(sig - sig.times(sig));
 }
 
-Matrix cross_entropy_loss(Matrix y_true, Matrix y_pred) {
-    return zeros(1, 1);
+double cross_entropy_loss(const Matrix &y_true, const Matrix &y_pred) {
+    if (y_true.shape != y_pred.shape) {
+        throw MatrixException("Shapes of y_true and y_pred must be the same");
+    }
+    double loss = 0;
+    for (int i = 0; i < y_true.shape.first; i++) {
+        loss += y_true[i][0] * log(y_pred[i][0]);
+    }
+    return -loss;
+}
+
+double cross_entropy_loss(int y_true, const Matrix &y_pred) {
+    if (y_true < 0 || y_true >= y_pred.shape.first) {
+        throw MatrixException("y_true must be a valid index for y_pred");
+    }
+    return -log(y_pred[y_true][0]);
 }
 
 
